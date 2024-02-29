@@ -1,0 +1,14 @@
+* {
+    font-family: cursive;
+}
+
+.parent {
+    background-color: green;
+    width: 100%;
+    width: 500px;
+    color: white;
+}
+
+a {
+    color: red;
+}
