@@ -4,15 +4,16 @@ import Home from './pages/Home'
 import About from './pages/About'
 import Contact from './pages/Contact'
 import Navbar from './Components/Navbar'
+import Page from './pages/Page'
 
 function App() {
   return (
-      <>
-          <Navbar/>
+    <>
+      <Navbar />
       <Routes>
-        <Route index element={<Home/>} />
-        <Route path="/About" element={<About/>} />
-        <Route path='/Contact' element={<Contact/>} />
+        <Route index element={<Home />} />
+        <Route path="*" element={<Page />} />
+        <Route path="/contact" element={<Contact />} />
       </Routes>
     </>
   )

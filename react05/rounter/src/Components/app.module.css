@@ -1,0 +1,17 @@
+.list {
+    list-style: none;
+    justify-content: space-around;
+    background-color: lightcyan !important;
+    color: blue;
+}
+
+ul {
+    margin-bottom: 100px;
+}
+
+.activeLink {
+    color: blue;
+}
+.normalLink {
+color:red ;
+}
