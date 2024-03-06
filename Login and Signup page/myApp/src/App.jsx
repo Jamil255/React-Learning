@@ -1,9 +1,16 @@
-import SignIn from "./pages/Login"
+import Login from './pages/Login'
+import SignUp from './pages/SignUP'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 const App = () => {
   return (
     <>
-      <SignIn />
+      <Router>
+        <Routes>
+          <Route path="/" exact element={<Login />} />
+          <Route path="/signup" exact element={<SignUp />} />
+        </Routes>
+      </Router>
     </>
   )
 }
