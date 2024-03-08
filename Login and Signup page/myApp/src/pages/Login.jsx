@@ -19,16 +19,14 @@ const defaultTheme = createTheme()
 const Login = () => {
   const navigate = useNavigate()
   const [showPassword, setPasswordShow] = useState(false)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const handleClick = () => {
     navigate('/signup')
   }
   const handleSubmit = (event) => {
     event.preventDefault()
-    const data = new FormData(event.currentTarget)
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    })
+    console.log(email, password)
   }
 
   return (
@@ -64,6 +62,7 @@ const Login = () => {
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={(e) => setEmail(e.target.value)}
             />
             <TextField
               margin="normal"
@@ -73,9 +72,11 @@ const Login = () => {
               label="Password"
               id="password"
               autoComplete="current-password"
+              onChange={(e) => setPassword(e.target.value)}
               InputProps={{
                 endAdornment: (
                   <InputAdornment
+                    sx={{ cursor: 'pointer' }}
                     position="end"
                     onClick={() => setPasswordShow(!showPassword)}
                   >

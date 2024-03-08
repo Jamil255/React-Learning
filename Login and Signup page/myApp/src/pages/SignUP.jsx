@@ -16,6 +16,8 @@ import { useNavigate } from 'react-router-dom'
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined'
 import { InputAdornment } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
+import { auth } from '../firebase'
 const defaultTheme = createTheme()
 const SignUp = () => {
   const navigate = useNavigate()
@@ -28,7 +30,22 @@ const SignUp = () => {
   }
   const handleSubmit = (event) => {
     event.preventDefault()
-    console.log(email, password)
+    if (!email || !password) {
+      return
+    }
+
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed up
+        const user = userCredential.user
+        console.log(user)
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code
+        const errorMessage = error.message
+        // ..
+      })
   }
 
   return (
@@ -94,13 +111,14 @@ const SignUp = () => {
                   fullWidth
                   name="password"
                   label="Password"
-                  type={showPassword? 'text' : 'password'}
+                  type={showPassword ? 'text' : 'password'}
                   id="password"
                   autoComplete="new-password"
                   onChange={(e) => setPassword(e.target.value)}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment
+                        sx={{ cursor: 'pointer' }}
                         position="start"
                         onClick={() => setPasswordShow(!showPassword)}
                       >
