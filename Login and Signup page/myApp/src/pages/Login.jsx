@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { useState } from 'react'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -13,9 +13,12 @@ import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { useNavigate } from 'react-router-dom'
+import { InputAdornment } from '@mui/material'
+import { Visibility, VisibilityOff } from '@mui/icons-material'
 const defaultTheme = createTheme()
-export default function Login() {
+const Login = () => {
   const navigate = useNavigate()
+  const [showPassword, setPasswordShow] = useState(false)
   const handleClick = () => {
     navigate('/signup')
   }
@@ -66,11 +69,20 @@ export default function Login() {
               margin="normal"
               required
               fullWidth
-              name="password"
+              type={showPassword ? 'text' : 'password'}
               label="Password"
-              type="password"
               id="password"
               autoComplete="current-password"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment
+                    position="end"
+                    onClick={() => setPasswordShow(!showPassword)}
+                  >
+                    {!showPassword ? <VisibilityOff /> : <Visibility />}
+                  </InputAdornment>
+                ),
+              }}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -101,3 +113,4 @@ export default function Login() {
     </ThemeProvider>
   )
 }
+export default Login
