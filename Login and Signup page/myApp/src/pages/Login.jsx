@@ -13,20 +13,41 @@ import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { useNavigate } from 'react-router-dom'
+import { signInWithEmailAndPassword } from 'firebase/auth'
 import { InputAdornment } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
+import 'react-toastify/dist/ReactToastify.css'
+import { auth } from '../firebase'
+import ToastAlert from '../utills/toast'
+import { ToastContainer } from 'react-toastify'
 const defaultTheme = createTheme()
 const Login = () => {
   const navigate = useNavigate()
   const [showPassword, setPasswordShow] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [isSigninSuccessful, setIsSigninSuccessful] = useState(false)
+
   const handleClick = () => {
     navigate('/signup')
   }
   const handleSubmit = (event) => {
     event.preventDefault()
-    console.log(email, password)
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user
+        setIsSigninSuccessful(true) // Set state to successful
+        ToastAlert('user successfully signup', 'success')
+
+        // Navigate after a brief delay to ensure toast visibility
+        setTimeout(() => navigate('/signup'), 2000) // 1 second delay (adjust as needed)
+      })
+      .catch((error) => {
+        const errorCode = error.code
+        const errorMessage = error.message
+        ToastAlert(errorMessage, 'error')
+      })
   }
 
   return (
@@ -97,6 +118,7 @@ const Login = () => {
             >
               Sign In
             </Button>
+            <ToastContainer />
             <Grid container justifyContent={'center'}>
               <Grid item>
                 <Link

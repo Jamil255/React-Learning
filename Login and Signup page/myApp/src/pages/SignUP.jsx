@@ -13,17 +13,20 @@ import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { useNavigate } from 'react-router-dom'
-import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined'
 import { InputAdornment } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../firebase'
+import 'react-toastify/dist/ReactToastify.css'
+import ToastAlert from '../utills/toast'
+import { Bounce, toast, ToastContainer } from 'react-toastify'
 const defaultTheme = createTheme()
 const SignUp = () => {
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setPasswordShow] = useState(false)
+  const [isSignupSuccessful, setIsSignupSuccessful] = useState(false)
 
   const handleClick = () => {
     navigate('/')
@@ -36,14 +39,18 @@ const SignUp = () => {
 
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed up
         const user = userCredential.user
         console.log(user)
-        // ...
+
+        setIsSignupSuccessful(true) // Set state to successful
+        ToastAlert('user successfully signup', 'success')
+        setTimeout(() => navigate('/'), 2000) // 1 second delay (adjust as needed)
       })
       .catch((error) => {
         const errorCode = error.code
         const errorMessage = error.message
+        console.log(errorCode)
+        ToastAlert(errorCode, 'error')
         // ..
       })
   }
@@ -145,6 +152,8 @@ const SignUp = () => {
             >
               Sign Up
             </Button>
+            <ToastContainer />
+
             <Grid container justifyContent="center">
               <Grid item justifyContent="flex-center">
                 <Link
