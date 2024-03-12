@@ -34,8 +34,9 @@ const SignUp = () => {
   const handleSubmit = (event) => {
     event.preventDefault()
     if (!email || !password) {
-      return
-    }
+        ToastAlert('Missing input field', 'warning')
+        return
+      }
 
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {

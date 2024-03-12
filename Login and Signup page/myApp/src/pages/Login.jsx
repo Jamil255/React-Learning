@@ -26,18 +26,20 @@ const Login = () => {
   const [showPassword, setPasswordShow] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [isSigninSuccessful, setIsSigninSuccessful] = useState(false)
 
   const handleClick = () => {
     navigate('/signup')
   }
   const handleSubmit = (event) => {
     event.preventDefault()
+    if (!email || !password) {
+      ToastAlert('Missing input field', 'warning')
+      return
+    }
 
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user
-        setIsSigninSuccessful(true) // Set state to successful
         ToastAlert('user successfully signup', 'success')
 
         // Navigate after a brief delay to ensure toast visibility
