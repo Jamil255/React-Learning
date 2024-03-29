@@ -8,6 +8,9 @@ const userSlice = createSlice({
     reducers: {
         updateName: (state, action) => {
             state.userName = "adeel afzal mughal "
+        },
+        deleteName: (state, action) => {
+            console.log("state.deleteName");
         }
     }
 })
