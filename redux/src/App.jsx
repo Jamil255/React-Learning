@@ -1,44 +1,31 @@
-import { useState } from 'react'
-import CompA from './components/CompA'
-import { add } from './store/slice/counterSlice'
-import { useDispatch } from 'react-redux'
-import { minus } from './store/slice/counterSlice'
-import UserName from './components/UserName'
-import { updateName } from './store/slice/userSlice'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchData } from './store/slice/productSlice'
+import ProductCard from './components/ProductCard'
+import Navabar from './components/Navabar'
 const App = () => {
-  const [count, setCount] = useState()
-  const [userName, setUserName] = useState()
+  const { loading, products } = useSelector((state) => state.product)
   const dispatch = useDispatch()
-  console.log('app ')
+
+  useEffect(() => {
+    dispatch(fetchData())
+  }, [])
+
   return (
     <>
-      <CompA />
-      <button
-        onClick={() => {
-          dispatch(add())
-        }}
-      >
-        Update
-      </button>
-      <button
-        onClick={() => {
-          dispatch(minus())
-        }}
-      >
-        Decirment
-      </button>
-
-      <div style={{ margin: '10px' }}>
-        {' '}
-        <UserName />
-      </div>
-      <button
-        onClick={() => {
-          dispatch(updateName())
-        }}
-      >
-        repalce
-      </button>
+      <Navabar />
+      <hr />
+      {loading ? (
+        <h1>loading....</h1>
+      ) : (
+        <div className="d-flex gap-4 flex-wrap mx-3">
+          {products?.map((prod) => (
+            <div key={prod.id}>
+              <ProductCard product={prod} />
+            </div>
+          ))}
+        </div>
+      )}
     </>
   )
 }
