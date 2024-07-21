@@ -1,52 +1,57 @@
-import React, { useState } from 'react'
-import Foo from './UseState'
+// Import the CryptoJS library
+import CryptoJS from 'crypto-js';
+import React, { useState, useEffect } from 'react';
 
 function App() {
-  //   const clickMe = (fullName, age, ele) => {
-  //   const [value, setValue] = useState('HELLO WORLD')
-  //   //     console.log(fullName, age, ele.target)
-  //   //   }
-  //   const clickMe = () => {
-  //     setValue('JAMIL AFZAL')
-  //   }
-  //   const [value, setValue] = useState(null)
-  //   const addValue = () => {
-  //     setValue(null)
-  //   }
-  //   console.log(null)
-  //    let  array=[1,2,3,4,5,6,7,8,9,10]
-  //     const [value, setValue] = useState(array)
+  const [data, setData] = useState(null);
 
-  //     const updateArr = () => {
-  //         setValue(array.push("adeel"))
-  //     console.log(value);
-  //     }
+  // Function to encrypt data
+  const encryptData = (data, secretKey) => {
+    return CryptoJS.AES.encrypt(JSON.stringify(data), secretKey).toString();
+  };
 
-  // const (value,setValue)= useState(array)
-  //     let array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-  //     const updateArr = () => {
-  //         setValue([...array])
-  //     }
+  // Function to decrypt data
+  const decryptData = (encryptedData, secretKey) => {
+    const bytes = CryptoJS.AES.decrypt(encryptedData, secretKey);
+    return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+  };
+
+  // Function to store encrypted data in local storage
+  const storeEncryptedData = (key, data, secretKey) => {
+    const encryptedData = encryptData(data, secretKey);
+    localStorage.setItem(key, encryptedData);
+  };
+
+  // Function to retrieve and decrypt data from local storage
+  const getDecryptedData = (key, secretKey) => {
+    const encryptedData = localStorage.getItem(key);
+    if (!encryptedData) return null;
+    return decryptData(encryptedData, secretKey);
+  };
+
+  useEffect(() => {
+    const secretKey = 'mySecretKey123';
+    const sampleData = { username: 'JohnDoe', email: 'john.doe@example.com' };
+
+    // Store encrypted data in local storage
+    storeEncryptedData('userData', sampleData, secretKey);
+
+    // Retrieve and decrypt data from local storage
+    const retrievedData = getDecryptedData('userData', secretKey);
+    setData(retrievedData);
+  }, []);
+
   return (
-    <>
-      {/* <button
-        onClick={(ele) => {
-          clickMe(' jamil afzal', 20, ele)
-        }}
-      >
-        CLICK ME!
-      </button> */}
-
-      {/* <p>{value}</p>
-      <button onClick={clickMe}>CLICK ME!</button> */}
-      {/* <p>Counetr:{value}</p> */}
-      {/* <button onClick={addValue}>Add Value</button> */}
-      <Foo />
-
-      {/* <button onClick={updateArr}>Update Array</button> */}
-    </>
-  )
+    <div className="App">
+      <h1>Encrypted Local Storage</h1>
+      {data && (
+        <div>
+          <p>Username: {data.username}</p>
+          <p>Email: {data.email}</p>
+        </div>
+      )}
+    </div>
+  );
 }
-export default App
 
-//
+export default App;
